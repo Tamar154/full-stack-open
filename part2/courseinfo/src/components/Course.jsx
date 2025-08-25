@@ -1,5 +1,5 @@
 const Header = ({ name }) => {
-  return <h1>{name}</h1>;
+  return <h2>{name}</h2>;
 };
 const Content = ({ parts }) => {
   return parts.map((part) => <Part key={part.id} part={part} />);
@@ -14,15 +14,14 @@ const Part = ({ part }) => {
 };
 
 const Course = ({ course }) => {
-  const calculateTotal = () => {
-    return course.parts.reduce((acc, cur) => acc + cur.exercises, 0);
-  };
-
   return (
     <>
       <Header name={course.name} />
       <Content parts={course.parts} />
-      <p>total of {calculateTotal()} exercises</p>
+      <p>
+        total of {course.parts.reduce((acc, cur) => acc + cur.exercises, 0)}{" "}
+        exercises
+      </p>
     </>
   );
 };
