@@ -5,11 +5,11 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  const total = good + neutral + bad;
+
   /**
    * the feedback values are: good 1, neutral 0, bad -1
    */
-  const total = good + neutral + bad;
-
   const calculateAverage = () => {
     return (good * 1 + bad * -1) / total;
   };
