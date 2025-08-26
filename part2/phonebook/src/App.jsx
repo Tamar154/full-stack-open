@@ -13,6 +13,14 @@ const App = () => {
       name: newName,
     };
 
+    // Alert the user if name already exists
+    const exists = persons.some((person) => person.name === newName);
+
+    if (exists) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
+
     setPersons(persons.concat(personObject));
     setNewName("");
   };
