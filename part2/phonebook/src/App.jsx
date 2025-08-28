@@ -1,6 +1,12 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import PersonList from "./components/PersonList";
 
 const App = () => {
+  /*
+  Maintain state and event handlers here
+  */
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456", id: 1 },
     { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
@@ -58,43 +64,27 @@ const App = () => {
 
   console.log("render: ", query);
 
-  const personsToShow =
-    query.length === 0
-      ? persons
-      : persons.filter((person) => person.name.toLowerCase().includes(query));
-
-  console.log("render: ", query);
-  console.log("personsToShow: ", personsToShow);
-
   return (
-    <div>
-      <h2>Phonebook</h2>
-
+    <>
       <div>
-        filter shown with <input value={query} onChange={handleQuery} />
-      </div>
+        <h2>PhoneBook</h2>
 
-      <form onSubmit={addPerson}>
-        <h2>Add a new</h2>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <div>
-        {personsToShow.map((person) => (
-          <p key={person.name}>
-            {person.name} {person.number}
-          </p>
-        ))}
+        <Filter value={query} onChange={handleQuery} />
+
+        <h3>Add a new</h3>
+
+        <PersonForm
+          person={{ newName, newNumber }}
+          onNameChange={handleNameChange}
+          onNumberChange={handleNumberChange}
+          onSubmit={addPerson}
+        />
+
+        <h3>Numbers</h3>
+
+        <PersonList persons={persons} query={query} />
       </div>
-    </div>
+    </>
   );
 };
 
