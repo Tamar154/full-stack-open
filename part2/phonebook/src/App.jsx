@@ -49,6 +49,12 @@ const App = () => {
     });
   };
 
+  const deletePerson = (id) => {
+    personService.remove(id).then((del) => {
+      setPersons(persons.filter((person) => person.id !== id));
+    });
+  };
+
   // Handler for updating input state on each keystroke
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -61,8 +67,6 @@ const App = () => {
   const handleQuery = (event) => {
     setQuery(event.target.value);
   };
-
-  console.log("render: ", query);
 
   return (
     <>
@@ -82,7 +86,7 @@ const App = () => {
 
         <h3>Numbers</h3>
 
-        <PersonList persons={persons} query={query} />
+        <PersonList persons={persons} query={query} onDelete={deletePerson} />
       </div>
     </>
   );
