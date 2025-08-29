@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import personService from "./services/persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonList from "./components/PersonList";
-const URL = "http://localhost:3001/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-
-  useEffect(() => {
-    axios.get(URL).then((response) => {
-      setPersons(response.data);
-    });
-  }, []);
-
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    personService.getAll().then((data) => {
+      setPersons(data);
+    });
+  }, []);
 
   // Handler for when the form is submitted
   const addPerson = (event) => {
@@ -44,8 +42,8 @@ const App = () => {
       return;
     }
 
-    axios.post(URL, personObject).then((response) => {
-      setPersons(persons.concat(response.data));
+    personService.create(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
     });
