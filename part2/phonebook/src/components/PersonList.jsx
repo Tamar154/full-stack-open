@@ -4,16 +4,18 @@ const PersonList = ({ persons, query, onDelete }) => {
       ? persons
       : persons.filter((person) => person.name.toLowerCase().includes(query));
 
-  const handleDelete = (id) => {
-    onDelete(id);
-  };
+  // const handleDelete = (id, name) => {
+  //   onDelete(id, name);
+  // };
 
   return (
     <div>
       {personsToShow.map((person) => (
         <p key={person.name}>
           {person.name} {person.number}
-          <button onClick={() => handleDelete(person.id)}>Delete</button>
+          <button onClick={() => onDelete(person.id, person.name)}>
+            Delete
+          </button>
         </p>
       ))}
     </div>

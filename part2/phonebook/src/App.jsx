@@ -49,10 +49,12 @@ const App = () => {
     });
   };
 
-  const deletePerson = (id) => {
-    personService.remove(id).then((del) => {
-      setPersons(persons.filter((person) => person.id !== id));
-    });
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService.remove(id).then((del) => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
   };
 
   // Handler for updating input state on each keystroke
