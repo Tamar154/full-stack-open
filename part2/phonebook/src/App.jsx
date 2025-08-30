@@ -35,7 +35,16 @@ const App = () => {
       alert(`${newName} and ${newNumber} are already added to phonebook`);
       return;
     } else if (nameExists) {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${personObject.name} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const existingPerson = persons.find(
+          (p) => p.name.toLowerCase() === newName.toLowerCase()
+        );
+        changePerson(existingPerson.id, personObject);
+      }
       return;
     } else if (numberExists) {
       alert(`${newNumber} is already added to phonebook`);
@@ -51,10 +60,18 @@ const App = () => {
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name} ?`)) {
-      personService.remove(id).then((del) => {
+      personService.remove(id).then(() => {
         setPersons(persons.filter((person) => person.id !== id));
       });
     }
+  };
+
+  const changePerson = (id, updatedPerson) => {
+    personService.update(id, updatedPerson).then((returnedPerson) => {
+      setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson)));
+    });
+    setNewName("");
+    setNewNumber("");
   };
 
   // Handler for updating input state on each keystroke
