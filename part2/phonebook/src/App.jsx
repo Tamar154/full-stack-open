@@ -3,12 +3,14 @@ import personService from "./services/persons";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonList from "./components/PersonList";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [query, setQuery] = useState("");
+  const [newNotification, setNewNotification] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((data) => {
@@ -44,6 +46,8 @@ const App = () => {
           (p) => p.name.toLowerCase() === newName.toLowerCase()
         );
         changePerson(existingPerson.id, personObject);
+
+        notify(`Number of ${personObject.name} changed.`);
       }
       return;
     } else if (numberExists) {
@@ -55,6 +59,7 @@ const App = () => {
       setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
+      notify(`Added ${returnedPerson.name}`);
     });
   };
 
@@ -87,10 +92,19 @@ const App = () => {
     setQuery(event.target.value);
   };
 
+  const notify = (message) => {
+    setNewNotification(message);
+    setTimeout(() => {
+      setNewNotification(null);
+    }, 5000);
+  };
+
   return (
     <>
       <div>
         <h2>PhoneBook</h2>
+
+        <Notification message={newNotification} />
 
         <Filter value={query} onChange={handleQuery} />
 
