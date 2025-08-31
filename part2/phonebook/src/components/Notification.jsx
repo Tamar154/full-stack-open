@@ -1,8 +1,10 @@
-const Notification = ({ message }) => {
-  if (message === null) return null;
+const Notification = ({ notification }) => {
+  if (notification == null) return null;
+
+  const { message, success } = notification;
 
   const styles = {
-    color: "green",
+    color: success ? "green" : "red",
     borderStyle: "solid",
     borderRadius: 10,
     padding: 10,

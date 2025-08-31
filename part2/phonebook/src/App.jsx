@@ -47,7 +47,7 @@ const App = () => {
         );
         changePerson(existingPerson.id, personObject);
 
-        notify(`Number of ${personObject.name} changed.`);
+        notify(`Number of ${personObject.name} changed.`, true);
       }
       return;
     } else if (numberExists) {
@@ -59,22 +59,38 @@ const App = () => {
       setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
-      notify(`Added ${returnedPerson.name}`);
+      notify(`Added ${returnedPerson.name}`, true);
     });
   };
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name} ?`)) {
-      personService.remove(id).then(() => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          notify(
+            `Information of ${name} has already been removed from server`,
+            false
+          );
+        });
     }
   };
 
   const changePerson = (id, updatedPerson) => {
-    personService.update(id, updatedPerson).then((returnedPerson) => {
-      setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson)));
-    });
+    personService
+      .update(id, updatedPerson)
+      .then((returnedPerson) => {
+        setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson)));
+      })
+      .catch((error) =>
+        notify(
+          `Information of ${updatedPerson.name} has already been removed from server`,
+          false
+        )
+      );
     setNewName("");
     setNewNumber("");
   };
@@ -92,8 +108,8 @@ const App = () => {
     setQuery(event.target.value);
   };
 
-  const notify = (message) => {
-    setNewNotification(message);
+  const notify = (message, success) => {
+    setNewNotification({ message, success });
     setTimeout(() => {
       setNewNotification(null);
     }, 5000);
@@ -104,7 +120,7 @@ const App = () => {
       <div>
         <h2>PhoneBook</h2>
 
-        <Notification message={newNotification} />
+        <Notification notification={newNotification} />
 
         <Filter value={query} onChange={handleQuery} />
 
