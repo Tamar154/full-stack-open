@@ -7,6 +7,7 @@ import CountryItem from "./components/CountryItem.jsx";
 function App() {
   const [countries, setCountries] = useState([]);
   const [query, setQuery] = useState("");
+  const [countryToShow, setCountryToShow] = useState(null);
 
   // Fetch all countries in API
   useEffect(() => {
@@ -15,6 +16,7 @@ function App() {
 
   const handleQuery = (event) => {
     setQuery(event.target.value);
+    setCountryToShow(null);
   };
 
   const getFilteredCountries = () =>
@@ -33,16 +35,25 @@ function App() {
       return <CountryItem country={filtered[0]} />;
     } else if (filteredLength >= 2 && filteredLength <= 10) {
       return filtered.map((country) => (
-        <p key={country.cca3}>{country.name.common}</p>
+        <p key={country.cca3}>
+          {country.name.common}
+          <button onClick={() => setCountryToShow(country)}>Show</button>
+        </p>
       ));
     } else return <p>Too many matches, specify another filter</p>;
   };
 
+  console.log(countryToShow);
   return (
     <>
       <div>
         <Filter query={query} onChange={handleQuery} />
-        <CountriesList content={handleContent()} />
+
+        {countryToShow ? (
+          <CountryItem country={countryToShow} />
+        ) : (
+          <CountriesList content={handleContent()} />
+        )}
       </div>
     </>
   );
