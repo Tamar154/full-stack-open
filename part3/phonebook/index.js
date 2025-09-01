@@ -26,6 +26,16 @@ const data = [
   },
 ];
 
+// GET (info page)
+app.get("/info", (request, response) => {
+  const date = new Date();
+  const info = `Phonebook has info for ${data.length} people`;
+  response.send(`
+    <p>${info}</p>
+    <p>${date}</p>`);
+  //   response.send(`Phonebook has info of ${data.length} people`);
+});
+
 // GET all
 app.get("/api/persons", (request, response) => {
   response.json(data);
