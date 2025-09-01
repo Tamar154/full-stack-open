@@ -17,8 +17,3 @@ Content-Type: application/json
     "name": "test",
     "number": "123456"
 }
-
-# {
-#     "name": "test",
-#     "number": "123456"
-# }
