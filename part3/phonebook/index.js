@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json());
 
-const data = [
+const persons = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -29,19 +29,29 @@ const data = [
 // GET (info page)
 app.get("/info", (request, response) => {
   const date = new Date();
-  const info = `Phonebook has info for ${data.length} people`;
+  const info = `Phonebook has info for ${persons.length} people`;
   response.send(`
     <p>${info}</p>
     <p>${date}</p>`);
-  //   response.send(`Phonebook has info of ${data.length} people`);
 });
 
 // GET all
 app.get("/api/persons", (request, response) => {
-  response.json(data);
+  response.json(persons);
+});
+
+// GET by id
+app.get("/api/persons/:id", (request, response) => {
+  const requestedId = request.params.id;
+
+  const data = persons.find((person) => person.id === requestedId);
+
+  if (data) {
+    response.json(data);
+  } else {
+    response.status(404).end();
+  }
 });
 
 const PORT = 3001;
 app.listen(PORT, () => console.log("Listening on PORT: ", PORT));
-
-// npm run dev
